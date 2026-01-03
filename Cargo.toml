@@ -1,0 +1,16 @@
+[package]
+name = "iq-slicer"
+version = "0.1.0"
+edition = "2021"
+authors = ["Marshall Beddoe"]
+description = "Automatic transmission detection and slicing for IQ recordings"
+license = "MIT"
+repository = "https://github.com/unmarshal/iq-slicer"
+keywords = ["sdr", "radio", "iq", "signal-processing", "fft"]
+categories = ["command-line-utilities", "science"]
+
+[dependencies]
+hound = "3.5"
+clap = { version = "4", features = ["derive"] }
+chrono = "0.4"
+rustfft = "6.2"
