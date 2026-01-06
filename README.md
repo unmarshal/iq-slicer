@@ -85,7 +85,7 @@ iq-slicer file recording.wav -o ./slices --output-format float32
 
 ## How It Works
 
-1. **FFT Peak Detection**: Computes FFT of each chunk with Hann window and 50% overlap, finding the strongest frequency bin. This catches narrowband signals anywhere in the monitored bandwidth with reduced spectral leakage.
+1. **FFT Peak Detection**: Computes FFT of each chunk with Blackman window and 50% overlap, finding the strongest frequency bin. This catches narrowband signals anywhere in the monitored bandwidth with reduced spectral leakage (-58 dB sidelobes).
 
 2. **Adaptive Threshold**: Tracks noise floor with exponential moving average. Triggers when peak power exceeds `noise_floor + margin`.
 

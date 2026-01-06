@@ -4,7 +4,7 @@ use chrono::Local;
 use crate::input::wav::read_iq_wav;
 use crate::input::stream::{IqStreamReader, StreamFormat};
 use crate::input::IqSample;
-use crate::detector::{auto_threshold, detect_segments, add_padding, calculate_peak_power_db};
+use crate::detector::{auto_threshold, detect_segments, add_padding, calculate_peak_power_db, blackman_window};
 use rustfft::FftPlanner;
 use crate::output::{write_iq_wav, write_iq_wav_float32, generate_filename};
 
@@ -161,8 +161,9 @@ pub fn process_stream(
     // Buffer for current transmission
     let mut tx_buffer: Vec<IqSample> = Vec::new();
 
-    // FFT planner for peak detection
+    // FFT planner and Blackman window for peak detection
     let mut fft_planner = FftPlanner::new();
+    let window = blackman_window(chunk_size);
 
     // Noise floor estimation (running average of FFT peak power)
     let mut noise_floor_db: f32 = -60.0;
@@ -186,8 +187,8 @@ pub fn process_stream(
             }
         };
 
-        // Use FFT peak power detection for wideband monitoring
-        let power_db = calculate_peak_power_db(&chunk, &mut fft_planner);
+        // Use FFT peak power detection with Blackman window for wideband monitoring
+        let power_db = calculate_peak_power_db(&chunk, &window, &mut fft_planner);
 
         // Debug: print power level every ~1 second
         debug_counter += 1;
