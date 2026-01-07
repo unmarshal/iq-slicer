@@ -35,7 +35,7 @@ impl Segment {
 
 /// Calculate peak FFT bin power in dB for a window of samples
 /// This finds the strongest signal in any frequency bin, much better for narrowband bursts
-/// Applies Hann window to reduce spectral leakage
+/// Applies window function to reduce spectral leakage
 pub fn calculate_peak_power_db(samples: &[IqSample], window: &[f32], planner: &mut FftPlanner<f32>) -> f32 {
     if samples.is_empty() {
         return f32::NEG_INFINITY;
@@ -44,7 +44,7 @@ pub fn calculate_peak_power_db(samples: &[IqSample], window: &[f32], planner: &m
     let fft_size = samples.len();
     let fft = planner.plan_fft_forward(fft_size);
 
-    // Apply Hann window and convert to complex
+    // Apply window and convert to complex
     let mut buffer: Vec<Complex<f32>> = samples
         .iter()
         .zip(window.iter())
